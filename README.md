@@ -90,4 +90,4 @@ The pipeline creates a timestamped output folder containing three essential JSON
 Built with focus on **data provenance**, **reproducibility** and **long-term research value**.
 ```
 
-Feel free to add badges, screenshots, a license section, or a table of contents later. This version should look clean and professional on GitHub right away.
+
