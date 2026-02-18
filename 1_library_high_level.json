@@ -1,0 +1,26 @@
+[
+    {
+        "book_name": "The Winter",
+        "author": "of My Soul",
+        "page_range": "5 - 21",
+        "unique_pages_count": 7,
+        "total_word_count": 1744,
+        "body_sensation_pages_found": 7
+    },
+    {
+        "book_name": "Autism_in",
+        "author": "Autism in",
+        "page_range": "90 - 95",
+        "unique_pages_count": 6,
+        "total_word_count": 1919,
+        "body_sensation_pages_found": 4
+    },
+    {
+        "book_name": "TheWinterofMySoul_SusanEHughes",
+        "author": "TheWinterofMySoul SusanEHughes",
+        "page_range": "3 - 21",
+        "unique_pages_count": 17,
+        "total_word_count": 4196,
+        "body_sensation_pages_found": 17
+    }
+]
