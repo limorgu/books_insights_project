@@ -1,8 +1,8 @@
 
-The Two-Step AI Library: High-Fidelity Research Pipeline
+# The Two-Step AI Library: High-Fidelity Research Pipeline
 This project is a modular, resume-aware pipeline designed to transform scanned book pages into structured, research-ready datasets. It prioritizes data integrity and human-aligned organization, shifting the focus from passive extraction to active architecture.
 
-Core Features
+# Core Features
 Resume-Aware Extraction: A global "Pre-Flight Check" scans all historical runs to ensure no page is ever processed twice, saving time and API costs.
 
 Folder-Based Ground Truth: Standardizes book and author metadata using physical directory naming conventions (Title_Author), eliminating AI-naming hallucinations.
