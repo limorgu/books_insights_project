@@ -1,0 +1,26 @@
+[
+    {
+        "book_name": "TheWinterofMySoul",
+        "author": "SusanEHughes",
+        "page_range": "3 - 102",
+        "unique_pages_count": 74,
+        "total_word_count": 18436,
+        "body_sensation_pages_found": 44
+    },
+    {
+        "book_name": "AutismInHeels",
+        "author": "JeniferCookOtoole",
+        "page_range": "1 - 176",
+        "unique_pages_count": 51,
+        "total_word_count": 19331,
+        "body_sensation_pages_found": 15
+    },
+    {
+        "book_name": "WhatLooksLikeBravery",
+        "author": "LaurelBraitman",
+        "page_range": "8 - 44",
+        "unique_pages_count": 19,
+        "total_word_count": 6188,
+        "body_sensation_pages_found": 7
+    }
+]
