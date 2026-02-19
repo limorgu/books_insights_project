@@ -16,9 +16,17 @@ Designed to be **resume-aware** (skips already processed pages), **audit-driven*
    ```bash
    python stage1_ingestion.py
 
-2. **Audit** — Check for missing pages & completion %Bashpython stage2_audit.py→ Produces gap_analysis_report.json
+2. **Audit** — Check for missing pages & completion
+   ```bash
+   python stage2_audit.py
 
-3. **Fill Gaps** — Process only the missing pagesBashpython stage3_gap_filler.py→ Interactive CLI to select books
+   → Produces gap_analysis_report.json
+
+4. **Fill Gaps** — Process only the missing pages
+   ``bash
+   python stage3_gap_filler.py
+
+   → Interactive CLI to select books
 
 Full Instructions
 → Detailed environment setup, folder naming rules, API key config, quality checks, and success checklist:
