@@ -23,7 +23,7 @@ Designed to be **resume-aware** (skips already processed pages), **audit-driven*
    → Produces gap_analysis_report.json
 
 4. **Fill Gaps** — Process only the missing pages
-   ``bash
+   ```bash
    python stage3_gap_filler.py
 
    → Interactive CLI to select books
