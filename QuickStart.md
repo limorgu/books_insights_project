@@ -1,4 +1,4 @@
-Here's your **fixed and properly formatted** `QUICKSTART.md` content. All the broken code blocks, missing backticks, missing headings, and messy inline commands have been cleaned up while keeping **every word and emoji exactly as you wrote them**.
+
 
 ```markdown
 # QuickStart Guide: Building Your Research Dataset from Scratch
