@@ -3,11 +3,11 @@
 ```markdown
 # QuickStart Guide: Building Your Research Dataset from Scratch
 
-⚡ **The Two-Step AI Library – actually a reliable three-stage pipeline**
+⚡ **Creating a reliable three-stage pipeline**
 
 This repository gives you an automated, resume-aware, audit-driven, cost-efficient system to convert raw book images into structured, research-ready JSON datasets.
 
-## 🟢 1. Environment & API Setup
+##  1. Environment & API Setup
 
 Before running anything, set up your environment and credentials.
 
