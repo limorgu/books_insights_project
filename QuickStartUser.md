@@ -1,94 +1,72 @@
 
 
 ```markdown
-⚡ QuickStart Guide: The Two-Step AI Library Building Your Research Dataset from Scratch
+### 2. `QUICKSTART.md`  
+(Detailed, step-by-step guide — your original content preserved & nicely formatted)
 
-This repository provides an automated, three-stage pipeline for converting raw book imagery into a structured, research-ready dataset. The system is designed to be resume-aware, audit-driven, and cost-efficient.
+```markdown
+# QuickStart Guide: Building Your Research Dataset from Scratch
 
-🟢 1. Environment & API Setup  
-Before running the pipeline, ensure your environment is configured and your API credentials are set.
+⚡ **The Two-Step AI Library – actually a reliable three-stage pipeline**
 
-**Activate Virtual Environment**  
-Bash
+This repository gives you an automated, resume-aware, audit-driven, cost-efficient system to convert raw book images into structured, research-ready JSON datasets.
 
-Navigate to your project root  
+## 🟢 1. Environment & API Setup
+
+Before running anything, set up your environment and credentials.
+
+### Activate Virtual Environment
+
 ```bash
+# Navigate to project root
 cd /path/to/your/folder
-```
 
-Create and activate environment  
-```bash
+# Create and activate
 python3 -m venv .venv
 source .venv/bin/activate
-```
 
-Install dependencies  
-```bash
+# Install core dependencies
 pip install openai pillow
-```
-
-**Persistent API Keys**  
-Run these commands to ensure your shell session has access to the required models:
-
-```bash
-echo 'export OPENAI_API_KEY="your_actual_key"' >> ~/.zshrc
+Persistent API Keys
+Add your key so it survives new terminal sessions:
+Bashecho 'export OPENAI_API_KEY="your_actual_key"' >> ~/.zshrc
 source ~/.zshrc
-```
-
-**VS Code Tip:** If the IDE defaults to a "ghost" or system environment, run  
-```bash
-rm -rf .venv
-```  
-in the project root to force a clean environment selection.
-
+VS Code Tip: If VS Code keeps using system Python or a "ghost" env:
+Bashrm -rf .venv
+Then re-open the folder — it should prompt to use the new .venv.
 🛠 2. The Three-Stage Pipeline
+Stage 1: High-Fidelity Extraction (Ingestion)
+Converts raw images → structured JSON objects.
+Bashpython stage1_ingestion.py
 
-**Stage 1: High-Fidelity Extraction (Ingestion)**  
-Converts raw images into structured JSON objects.
+Resume-aware: Skips images that already have a matching JSON
+Data Prep: Organize images in folders like:
+BookTitle_AuthorName/01_page.jpg, BookTitle_AuthorName/02_page.jpg, etc.
 
-Command:  
-```bash
-python stage1_ingestion.py
-```
+Stage 2: Operations Center (Audit)
+Cross-checks images vs. processed library → finds sequence gaps.
+Bashpython stage2_audit.py
 
-Logic: This script is resume-aware; it automatically skips source images that already have a corresponding JSON in the library.
+Output: gap_analysis_report.json
+Shows completion % per book + exact missing page numbers
 
-Data Prep: Place images in folders following the `BookTitle_AuthorName/` convention.
+Stage 3: Precision Infill (Refinement)
+Targets incomplete books and processes only missing pages.
+Bashpython stage3_gap_filler.py
 
-**Stage 2: Operations Center (Audit)**  
-Cross-references source images against the organized library to detect sequence gaps.
+Interactive CLI: Choose which book(s) to complete
+Prevents wasting API calls on already-finished content
 
-Command:  
-```bash
-python stage2_audit.py
-```
+🔍 3. Quality Control & Synthesis
+After ingestion:
 
-Result: Generates a `gap_analysis_report.json` showing completion percentages and specific missing page numbers per book.
-
-**Stage 3: Precision Infill (Refinement)**  
-Targets specific books to reach 100% completion based on the Stage 2 Audit.
-
-Command:  
-```bash
-python stage3_gap_filler.py
-```
-
-Workflow: An interactive CLI allows you to select an incomplete book and scan only the missing pages, preventing wasted API costs.
-
-🔍 3. Quality Control & Synthesis  
-Once ingestion is complete, run the synthesis scripts to generate research-ready tables.
-
-- **Thematic Filtering**: Consolidate findings into a master table filtered for specific thematic insights (e.g., body sensations).  
-- **Accuracy Audit**: Run  
-  ```bash
-  python stage4_accuracy_audit.py
-  ```  
-  to generate Trust Scores and verify verbatim transcription accuracy.
+Thematic Filtering — Combine results into filtered master tables (e.g., body sensations only)
+Accuracy AuditBashpython stage4_accuracy_audit.py→ Generates Trust Scores + verifies transcription fidelity
 
 ✅ Success Checklist
 
-- **Global Deduplication**: Ensure no page repetitions exist in the final summary.
-- **Environment Check**: Use `which python` to ensure you are running from the local `.venv` and not system Python.
-- **Gap Closure**: Verify that all books in the Stage 2 report show 100.0% completion.
+ No duplicate pages in final output (global deduplication)
+which python points to .venv/bin/python (not system Python)
+ All books in gap_analysis_report.json show 100.0% completion
 ```
 
