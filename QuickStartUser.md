@@ -1,9 +1,4 @@
 
-
-```markdown
-### 2. `QUICKSTART.md`  
-(Detailed, step-by-step guide — your original content preserved & nicely formatted)
-
 ```markdown
 # QuickStart Guide: Building Your Research Dataset from Scratch
 
