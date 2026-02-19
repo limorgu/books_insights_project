@@ -4,6 +4,18 @@ import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
 
+def compact_ranges(numbers: List[int]) -> str:
+    if not numbers: return ""
+    numbers = sorted(set(numbers))
+    ranges = []
+    start = numbers[0]
+    for i in range(1, len(numbers) + 1):
+        if i == len(numbers) or numbers[i] != numbers[i-1] + 1:
+            end = numbers[i-1]
+            ranges.append(f"{start}-{end}" if start != end else f"{start}")
+            if i < len(numbers): start = numbers[i]
+    return ", ".join(ranges)
+
 # ---------------------------
 # Config
 # ---------------------------
@@ -46,8 +58,20 @@ def process_stage_2_with_audit():
         total_source_count = len(raw_images)
         
         # Find matching organized folder (trying exact or slug match)
-        org_folder_name = s_folder.name.replace(" ", "")
-        book_jsons = json_map.get(org_folder_name, [])
+        # Try multiple matching strategies to find the organized JSONs
+        slug_name = s_folder.name.replace(" ", "")
+        # Check for: Exact name, Name without spaces, or name starting with the title
+        book_jsons = json_map.get(s_folder.name) or json_map.get(slug_name)
+        
+        # If still not found, search for a folder that starts with our title
+        if not book_jsons:
+            for folder_key in json_map.keys():
+                if folder_key.startswith(title.replace(" ", "")):
+                    book_jsons = json_map[folder_key]
+                    break
+        
+        if not book_jsons:
+            book_jsons = []
         
         found_pages = []
         total_words = 0
@@ -74,6 +98,7 @@ def process_stage_2_with_audit():
         completion_pct = (processed_count / total_source_count * 100) if total_source_count > 0 else 0
         
         # Build the Audit Entry
+        # Build the Audit Entry
         audit_entry = {
             "book_name": title,
             "author": author,
@@ -82,7 +107,7 @@ def process_stage_2_with_audit():
             "pages_processed": processed_count,
             "total_images_in_source": total_source_count,
             "missing_count": total_source_count - processed_count,
-            "sequence_gaps": gaps,
+            "sequence_gaps": compact_ranges(gaps), # Using the new helper here
             "total_word_count": total_words
         }
         audit_report.append(audit_entry)
