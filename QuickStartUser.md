@@ -1,71 +1,64 @@
  ⚡ QuickStart Guide: The Two-Step AI Library
 Building Your Research Dataset from Scratch
 
-This guide provides the exact workflow to activate your environment and move through the extraction and synthesis pipeline established in Note #5 and Note #6.
+This repository provides an automated, three-stage pipeline for converting raw book imagery into a structured, research-ready dataset. The system is designed to be resume-aware, audit-driven, and cost-efficient.
 
-1️⃣ Environment & API Setup
-Before running any scripts, you must activate your specialized virtual environment and ensure your API keys are registered.
+🟢 1. Environment & API Setup
+Before running the pipeline, ensure your environment is configured and your API credentials are set.
 
-Activate your environment:
-
+Activate Virtual Environment
 Bash
 # Navigate to your project root
 cd /path/to/your/folder
 
-# Activate the environment
-source /path/to/your/folder/bin/activate
-Install Persistent API Keys:
-Run these once in your terminal to ensure your system remembers your credentials permanently:
+# Create and activate environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies
+pip install openai pillow
+Persistent API Keys
+Run these commands to ensure your shell session has access to the required models:
 
 Bash
-echo 'export GEMINI_API_KEY="your_actual_key"' >> ~/.zshrc
 echo 'export OPENAI_API_KEY="your_actual_key"' >> ~/.zshrc
 source ~/.zshrc
-💡 VS Code Tip: If VS Code defaults to a "ghost" .venv, run rm -rf .venv in the project root to force it to use your active environment.
+VS Code Tip: If the IDE defaults to a "ghost" or system environment, run rm -rf .venv in the project root to force a clean environment selection.
 
-2️⃣ Data Preparation
-AI intelligence starts with human-aligned organization.
+🛠 2. The Three-Stage Pipeline
+Stage 1: High-Fidelity Extraction (Ingestion)
+Converts raw images into structured JSON objects.
 
-Location: Place book images inside your data input folder.
+Command: python stage1_ingestion.py
 
-Naming Convention: Use BookTitle_AuthorName/ for folder names. This acts as the "Ground Truth" for the pipeline.
+Logic: This script is resume-aware; it automatically skips source images that already have a corresponding JSON in the library.
 
-3️⃣ Step 1: High-Fidelity Extraction
-Run the extraction script to convert images into structured data objects.
+Data Prep: Place images in folders following the BookTitle_AuthorName/ convention.
 
-Bash
-python stage1_extract_features_to_json.py
-Result: Creates enriched JSONs for every page.
+Stage 2: Operations Center (Audit)
+Cross-references source images against the organized library to detect sequence gaps.
 
-Resume-Aware: This script is safe to rerun; it automatically skips images that have already been processed.
+Command: python stage2_audit.py
 
-4️⃣ Step 2: Synthesis & Filtering
-Consolidate your findings into a master research table and filter for thematic insights like body sensations.
+Result: Generates a gap_analysis_report.json showing completion percentages and specific missing page numbers per book.
 
-Bash
-python stage2_make_json_features_table.py
-Result: A master summary file in your output folder.
+Stage 3: Precision Infill (Refinement)
+Targets specific books to reach 100% completion based on the Stage 2 Audit.
 
-Verification: Check the terminal output for data completion counts to audit for any missing information.
+Command: python stage3_gap_filler.py
 
-5️⃣ Audit & Finalization (Quality Control)
-Practice "The Vigilant Monitor" by running a sample audit to verify AI trust scores.
+Workflow: An interactive CLI allows you to select an incomplete book and scan only the missing pages, preventing wasted API costs.
 
-Audit for Accuracy:
+🔍 3. Quality Control & Synthesis
+Once ingestion is complete, run the synthesis scripts to generate research-ready tables.
 
-Bash
-python stage4_accuracy_audit.py
-Result: A report showing Trust Scores and accuracy ratings.
+Thematic Filtering: Consolidate findings into a master table filtered for specific thematic insights (e.g., body sensations).
 
-Generate Final Research Tables:
-
-Bash
-python stage5_generate_final_tables.py
-Result: Final research-ready datasets grouped by Book and Author.
+Accuracy Audit: Run python stage4_accuracy_audit.py to generate Trust Scores and verify verbatim transcription accuracy.
 
 ✅ Success Checklist
 Global Deduplication: Ensure no page repetitions exist in the final summary.
 
-Thematic Accuracy: Check the Body Sensations report for high-fidelity quotes.
+Environment Check: Use which python to ensure you are running from the local .venv and not system Python.
 
-Environment Check: Use the which python command to ensure you aren't in a "Ghost Environment".
+Gap Closure: Verify that all books in the Stage 2 report show 100.0% completion.
