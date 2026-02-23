@@ -99,38 +99,7 @@ def run_stage_3_smart_fill():
         print(f"❌ Error: Source folder not found at {target_folder}")
         return
 
-    # ⚙️ STEP D: Execution Logic (Fill only the gaps)
-    book_output_dir = LIBRARY_ROOT / target_folder.name
-    book_output_dir.mkdir(parents=True, exist_ok=True)
-
-    # Cross-reference existing files to avoid duplicates
-    already_done_sources = set()
-    for jf in book_output_dir.glob("page_*.json"):
-        try:
-            d = json.loads(jf.read_text())
-            already_done_sources.add(d.get("source_image"))
-        except: continue
-
-    all_images = sorted([p for p in target_folder.iterdir() if p.suffix.lower() in ['.jpg', '.png', '.jpeg']])
-    images_to_process = [img for img in all_images if img.name not in already_done_sources]
-
-    if not images_to_process:
-        print(f"✅ No missing images found in source for {target_folder.name}!")
-        return
-
-    print(f"🚀 Processing {len(images_to_process)} missing pages...")
-    for img in images_to_process:
-        print(f"  📸 Scanning {img.name}...")
-        res = extract_page_data(client, img)
-        if len(res.get("content", "").split()) >= WORD_THRESHOLD:
-            res["source_image"] = img.name
-            res["book_name"] = selected_book['book_name']
-            res["book_author"] = selected_book['author']
-            
-            label = res.get("page_number") or f"file_{img.stem}"
-            (book_output_dir / f"page_{label}.json").write_text(json.dumps(res, indent=4))
-
-    print(f"✅ Completed. Run Stage 2 again to verify the new 100% status!")
+    /Users/limorkissos/Documents/books/inbox_photos/data_test/feb19_stage3_gapfiller.py
 
 if __name__ == "__main__":
     run_stage_3_smart_fill()
