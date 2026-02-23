@@ -84,21 +84,34 @@ def run_stage_3_smart_fill():
     
     try:
         selected_book = incomplete_books[int(choice)]
-        # Match the folder naming convention from Stage 1/2
-        folder_name = f"{selected_book['book_name']}_{selected_book['author']}".replace(" ", "")
-        target_folder = SOURCE_BOOKS_ROOT / folder_name
+        book_title_slug = selected_book['book_name'].replace(" ", "")
         
-        if not target_folder.exists():
-            # Fallback if the name doesn't have the author suffix
-            target_folder = SOURCE_BOOKS_ROOT / selected_book['book_name'].replace(" ", "")
+        # --- NEW SMART MATCHING LOGIC ---
+        target_folder = None
+        
+        # 1. Try to find a folder that STARTS with the book title slug
+        possible_folders = [
+            d for d in SOURCE_BOOKS_ROOT.iterdir() 
+            if d.is_dir() and d.name.startswith(book_title_slug)
+        ]
+        
+        if possible_folders:
+            # Pick the most likely match (usually the only one)
+            target_folder = possible_folders[0]
+            print(f"📂 Found matching folder: {target_folder.name}")
+        else:
+            # 2. Final fallback to the basic naming convention
+            folder_name = f"{selected_book['book_name']}_{selected_book['author']}".replace(" ", "")
+            target_folder = SOURCE_BOOKS_ROOT / folder_name
+
     except (ValueError, IndexError):
         print("❌ Invalid selection.")
         return
 
-    if not target_folder.exists():
-        print(f"❌ Error: Source folder not found at {target_folder}")
+    if not target_folder or not target_folder.exists():
+        print(f"❌ Error: Source folder not found for {book_title_slug}")
+        print(f"Checked in: {SOURCE_BOOKS_ROOT}")
         return
-
     # ⚙️ STEP D: Execution Logic (Fill only the gaps)
     book_output_dir = LIBRARY_ROOT / target_folder.name
     book_output_dir.mkdir(parents=True, exist_ok=True)
