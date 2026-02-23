@@ -99,7 +99,54 @@ def run_stage_3_smart_fill():
         print(f"❌ Error: Source folder not found at {target_folder}")
         return
 
-    /Users/limorkissos/Documents/books/inbox_photos/data_test/feb19_stage3_gapfiller.py
+    # ⚙️ STEP D: Execution Logic (Fill only the gaps)
+    book_output_dir = LIBRARY_ROOT / target_folder.name
+    book_output_dir.mkdir(parents=True, exist_ok=True)
 
+    existing_json_content = []
+    for jf in book_output_dir.glob("page_*.json"):
+        try:
+            existing_json_content.append(json.loads(jf.read_text()))
+        except: continue
+
+    already_done_images = {d.get("source_image") for d in existing_json_content if d.get("source_image")}
+    already_done_pages = {int(d.get("page_number")) for d in existing_json_content if d.get("page_number") is not None}
+
+    all_images = sorted([p for p in target_folder.iterdir() if p.suffix.lower() in ['.jpg', '.png', '.jpeg']])
+    images_to_process = [img for img in all_images if img.name not in already_done_images]
+
+    if not images_to_process:
+        print(f"✅ No missing images found in source for {target_folder.name}!")
+        return
+
+    # --- NEW: User decides the processing limit ---
+    print(f"\n🚀 Found {len(images_to_process)} missing pages.")
+    limit_input = input(f"How many pages to process? (Enter a number, or 'all' for all {len(images_to_process)}): ").strip().lower()
+    
+    if limit_input == 'all':
+        limit = len(images_to_process)
+    else:
+        try:
+            limit = int(limit_input)
+        except ValueError:
+            print("⚠️ Invalid input. Defaulting to 10 pages for safety.")
+            limit = 10
+
+    # 🚀 Run with the selected limit
+    for img in images_to_process[:limit]: 
+        print(f"  📸 Scanning {img.name}...")
+        res = extract_page_data(client, img)
+        
+        res["source_image"] = img.name 
+        res["book_name"] = selected_book['book_name']
+        res["book_author"] = selected_book['author']
+        
+        p_num = res.get("page_number")
+        # Use page number for the filename, fallback to image name to prevent overwrites
+        label = p_num if (p_num and int(p_num) not in already_done_pages) else f"file_{img.stem}"
+            
+        (book_output_dir / f"page_{label}.json").write_text(json.dumps(res, indent=4))
+
+    print(f"\n✅ Finished processing {limit} pages. Re-run Stage 2 to see updated metrics!")
 if __name__ == "__main__":
     run_stage_3_smart_fill()
